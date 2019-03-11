@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+import Home from './views/Home';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -16,10 +16,39 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      component: () => import('./views/About.vue'),
+    },
+    /**
+     * Protected Application Routes
+     */
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      // secure: true,
+      component: () => import('./views/Dashboard.vue'),
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  // Look at all routes
+  router.options.routes.forEach((route) => {
+    if (to.matched[0].name === 'dashboard') {
+      if (!localStorage.access_token) {
+        return next('/');
+      }
+    }
+
+    // If this is the current route and it's secure
+    if (to.matched[0].path === route.path && route.secure) {
+      if (!localStorage.access_token) {
+        return next('/');
+      }
+    }
+
+    // Proceed as normal
+    return next();
+  });
+});
+
+export default router;
