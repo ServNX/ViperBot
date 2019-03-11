@@ -1,29 +1,61 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <v-app id="inspire" dark>
+      <v-toolbar fixed dense>
+        <img class="logo" src="./assets/logo.png" alt="Logo"/>
+
+        <v-toolbar-title>ViperBot</v-toolbar-title>
+
+        <v-toolbar-items class="ml-3">
+          <v-btn flat>Features</v-btn>
+          <v-btn flat>Premium</v-btn>
+          <v-btn flat>Community</v-btn>
+        </v-toolbar-items>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon href="http://viper.servnx.com:3050/api/auth" v-if="!logged_in">
+          <v-icon>person</v-icon>
+        </v-btn>
+
+        <v-btn icon to="dashboard" v-if="logged_in">
+          <v-icon>launch</v-icon>
+        </v-btn>
+      </v-toolbar>
+
+      <router-view/>
+    </v-app>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  .logo {
+    margin-top: 2px;
+    margin-right: -12px;
+    width: 45px;
   }
-}
 </style>
+
+<script>
+  // eslint-disable-next-line
+  import { getUrlParam } from './utils/uri';
+
+  export default {
+    name: 'app',
+    data () {
+      return {};
+    },
+    computed: {
+      logged_in () {
+        return !!localStorage.getItem('access_token');
+      },
+    },
+    beforeCreate () {
+      const token = getUrlParam('token', null);
+      if (token) {
+        localStorage.setItem('access_token', token);
+        window.location.replace('/dashboard');
+      }
+    },
+  };
+</script>
