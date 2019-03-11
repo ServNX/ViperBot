@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mt-3 mx-auto"
-    max-width="600"
+    :max-width="maxWidth"
   >
     <v-sheet
       class="v-sheet--offset mx-auto"
@@ -12,7 +12,7 @@
       <v-sparkline
         :labels="labels"
         :value="values"
-        color="white"
+        :color="chartColor"
         line-width="2"
         padding="16"
       ></v-sparkline>
@@ -43,6 +43,8 @@
       labels: {type: Array, required: true},
       values: {type: Array, required: true},
       color: {type: String, default: 'cyan'},
+      chartColor: {type: String, default: 'white'},
+      maxWidth: {type: String, default: '600'},
       title: String,
       desc: String,
     },
