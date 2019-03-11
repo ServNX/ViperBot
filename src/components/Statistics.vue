@@ -38,7 +38,7 @@
 
 <script>
   import moment from 'moment';
-  import StatCard from '@/components/StatCard';
+  import StatCard from './StatCard';
 
   export default {
     name: 'statistics',
