@@ -2,7 +2,7 @@
   <div id="app">
     <v-app id="inspire" dark>
       <v-toolbar fixed dense>
-        <img class="logo" src="./assets/logo.png" alt="Logo"/>
+        <!--<img class="logo" src="./assets/logo.png" alt="Logo"/>-->
 
         <v-toolbar-title>ViperBot</v-toolbar-title>
 
