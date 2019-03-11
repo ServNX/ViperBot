@@ -1,0 +1,9 @@
+@import '~vuetify/dist/vuetify.css';
+@import '~material-design-icons-iconfont/dist/material-design-icons.css';
+@import './scss/variables';
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Crimson+Text');
+
+h1, h2 {
+  font-family: 'Crimson Text', serif;
+}
