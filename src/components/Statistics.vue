@@ -2,50 +2,29 @@
   <v-container grid-list-lg>
     <v-layout wrap>
 
-      <v-flex xs4>
-        <v-card
-          class="mt-3 mx-auto"
-          max-width="400"
+      <v-flex xs6>
+        <StatCard
+          :labels="servers.labels"
+          :values="servers.values"
+          title="Servers"
+          desc="# of servers added in the past 5 days"
         >
-          <v-sheet
-            class="v-sheet--offset mx-auto"
-            color="cyan"
-            elevation="12"
-            max-width="calc(100% - 32px)"
-          >
-            <v-sparkline
-              :labels="servers.labels"
-              :value="servers.values"
-              color="white"
-              line-width="2"
-              padding="16"
-            ></v-sparkline>
-          </v-sheet>
-
-          <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">Servers</div>
-            <div class="subheading font-weight-light grey--text">
-              # of servers in the past 5 days
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <v-icon
-              class="mr-2"
-              small
-            >
+          <div slot="footer">
+            <v-icon class="mr-2" small>
               dns
             </v-icon>
             <span class="caption grey--text font-weight-light">
-              last server added {{servers.last}} ago
+              last server added {{servers.last}}
             </span>
-          </v-card-text>
-        </v-card>
+          </div>
+        </StatCard>
       </v-flex>
 
-      <v-flex xs4>
+      <v-flex xs6>
 
       </v-flex>
 
-      <v-flex xs4>
+      <v-flex xs12>
 
       </v-flex>
 
@@ -53,16 +32,26 @@
   </v-container>
 </template>
 
+<style lang="scss" scoped>
+
+</style>
+
 <script>
+  import moment from 'moment';
+  import StatCard from '@/components/StatCard';
+
   export default {
     name: 'statistics',
+    components: {
+      StatCard,
+    },
     data () {
       return {
         token: '',
         servers: {
           labels: ['3/3', '3/4', '3/5', '3/6', '3/7', '3/8', '3/9'],
           values: [0, 0, 0, 0, 0, 0, 0],
-          last: '26 Minutes',
+          last: '',
         },
       };
     },
@@ -73,7 +62,7 @@
             token: this.token,
           },
         }).then(response => {
-          response.data.forEach(server => {
+          response.data.groups.forEach(server => {
             const createdAt = new Date(server.created_at);
             const label = `${createdAt.getMonth() + 1}/${createdAt.getDate()}`;
 
@@ -86,6 +75,8 @@
             const values = this.servers.values;
             this.servers.values = values.slice(Math.max(values.length - 5, 1));
           });
+
+          this.servers.last = moment(response.data.last).utc(true).fromNow();
         }).catch(err => {
           if (err.response.status === 401) {
             window.location.replace('http://viper.servnx.com:3050/api/auth');
@@ -99,11 +90,3 @@
     },
   };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-  .v-sheet--offset {
-    top: -24px;
-    position: relative;
-  }
-</style>
