@@ -1,13 +1,46 @@
 <template>
-  <v-container grid-list-lg>
-    <v-layout wrap>
+  <v-container grid-list-md>
+    <v-layout row mb-5>
+      <v-flex xs3>
+        <v-card class="white--text">
+          <v-layout row>
+            <v-flex xs7>
+              <v-card-text>
+                <div>
+                  <i class="fa fa-user fa-5x cyan--text"></i>
+                </div>
+                <div style="font-size: 24px">
+                  Users
+                </div>
+              </v-card-text>
+            </v-flex>
+            <v-flex xs5>
+              <span style="font-size: 40px">18</span>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
 
+      <v-flex xs3>
+
+      </v-flex>
+
+      <v-flex xs3>
+
+      </v-flex>
+
+      <v-flex xs3>
+
+      </v-flex>
+    </v-layout>
+
+    <v-layout row>
       <v-flex xs6>
         <StatCard
           :labels="servers.labels"
           :values="servers.values"
           title="Servers"
-          desc="# of servers added in the past 5 days"
+          desc="# of servers over the past 5 days"
         >
           <div slot="footer">
             <v-icon class="mr-2" small>
@@ -21,13 +54,23 @@
       </v-flex>
 
       <v-flex xs6>
-
+        <StatCard
+          :labels="servers.labels"
+          :values="servers.values"
+          title="Users"
+          desc="# of users over past 5 days"
+          color="indigo"
+        >
+          <div slot="footer">
+            <v-icon class="mr-2" small>
+              dns
+            </v-icon>
+            <span class="caption grey--text font-weight-light">
+              last users added {{servers.last}}
+            </span>
+          </div>
+        </StatCard>
       </v-flex>
-
-      <v-flex xs12>
-
-      </v-flex>
-
     </v-layout>
   </v-container>
 </template>
