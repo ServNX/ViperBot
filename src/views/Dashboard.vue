@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import DashboardLayout from '../components/DashboardLayout';
+  import DashboardLayout from './layouts/DashboardLayout';
   import Statistics from '../components/Statistics';
 
   export default {

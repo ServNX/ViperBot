@@ -12,6 +12,13 @@ import './App.scss';
 
 Vue.use(VueAxios, axios);
 
+Vue.axios.interceptors.response.use(response => response,
+  err => {
+    if (err.response.status === 401) {
+      window.location.replace('http://viper.servnx.com:3050/api/auth');
+    }
+  });
+
 Vue.use(Vuetify, {
   theme: {
     accent: '#0dc8df',

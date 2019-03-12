@@ -35,7 +35,39 @@
 
         </v-list-tile>
 
-        <v-list-tile @click="to('/')">
+        <v-list-group>
+          <div slot="activator">
+            <v-list-tile>
+
+              <v-list-tile-action>
+                <v-icon>dns</v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Servers</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </div>
+
+          <v-list-tile
+            v-for="server in myServers"
+            :key="server.id"
+            @click=""
+          >
+            <v-list-tile-action>
+              <v-avatar size="30">
+                <img :src="iconUrl(server.id, server.icon)" alt=""/>
+              </v-avatar>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ server.name }}</v-list-tile-title>
+            </v-list-tile-content>
+
+          </v-list-tile>
+        </v-list-group>
+
+        <v-list-tile @click="to('/settings')">
 
           <v-list-tile-action>
             <v-icon>settings</v-icon>
@@ -76,12 +108,41 @@
   export default {
     name: 'dashboard-layout',
     data() {
-      return {};
+      return {
+        servers: [],
+      };
+    },
+    computed: {
+      myServers() {
+        return this.servers.filter(server => {
+          return server.owner === true;
+        });
+      },
     },
     methods: {
+      iconUrl(serverId, hash) {
+        return `https://cdn.discordapp.com/icons/${serverId}/${hash}.png`;
+      },
+      getServers() {
+        const token = localStorage.getItem('access_token');
+        const url = 'https://discordapp.com/api/users/@me/guilds';
+
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        this.axios.get(url, { headers })
+          .then(response => {
+            this.servers = response.data;
+          })
+          .catch(err => console.log(err.response));
+      },
       to(route) {
         this.$router.push(route);
       },
+    },
+    created() {
+      this.getServers();
     },
   };
 </script>

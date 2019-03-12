@@ -1,7 +1,47 @@
 <template>
   <v-container grid-list-md>
     <v-layout row mb-5>
-      <v-flex xs3>
+      <v-flex xs4>
+        <v-card class="white--text">
+          <v-layout row>
+            <v-flex xs7>
+              <v-card-text>
+                <div>
+                  <i class="fa fa-server fa-5x cyan--text"></i>
+                </div>
+                <div style="font-size: 24px">
+                  Servers
+                </div>
+              </v-card-text>
+            </v-flex>
+            <v-flex xs5>
+              <span style="font-size: 90px">{{servers.activeCount}}</span>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs4>
+        <v-card class="white--text">
+          <v-layout row>
+            <v-flex xs7>
+              <v-card-text>
+                <div>
+                  <i class="fa fa-comments fa-5x cyan--text"></i>
+                </div>
+                <div style="font-size: 24px">
+                  Channels
+                </div>
+              </v-card-text>
+            </v-flex>
+            <v-flex xs5>
+              <span style="font-size: 90px">{{channels.activeCount}}</span>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs4>
         <v-card class="white--text">
           <v-layout row>
             <v-flex xs7>
@@ -15,22 +55,10 @@
               </v-card-text>
             </v-flex>
             <v-flex xs5>
-              <span style="font-size: 40px">18</span>
+              <span style="font-size: 90px">{{users.activeCount}}</span>
             </v-flex>
           </v-layout>
         </v-card>
-      </v-flex>
-
-      <v-flex xs3>
-
-      </v-flex>
-
-      <v-flex xs3>
-
-      </v-flex>
-
-      <v-flex xs3>
-
       </v-flex>
     </v-layout>
 
@@ -39,37 +67,22 @@
         <StatCard
           :labels="servers.labels"
           :values="servers.values"
-          title="Servers"
-          desc="# of servers over the past 5 days"
+          title="New Servers"
+          desc="When the bot gets invited to a new server"
         >
           <div slot="footer">
             <v-icon class="mr-2" small>
               dns
             </v-icon>
             <span class="caption grey--text font-weight-light">
-              last server added {{servers.last}}
+              last server created {{servers.last}}
             </span>
           </div>
         </StatCard>
       </v-flex>
 
       <v-flex xs6>
-        <StatCard
-          :labels="servers.labels"
-          :values="servers.values"
-          title="Users"
-          desc="# of users over past 5 days"
-          color="indigo"
-        >
-          <div slot="footer">
-            <v-icon class="mr-2" small>
-              dns
-            </v-icon>
-            <span class="caption grey--text font-weight-light">
-              last users added {{servers.last}}
-            </span>
-          </div>
-        </StatCard>
+
       </v-flex>
     </v-layout>
   </v-container>
@@ -95,17 +108,37 @@
           labels: ['3/3', '3/4', '3/5', '3/6', '3/7', '3/8', '3/9'],
           values: [0, 0, 0, 0, 0, 0, 0],
           last: '',
+          activeCount: 0,
+        },
+        channels: {
+          activeCount: 0,
+        },
+        users: {
+          activeCount: 0,
         },
       };
     },
     methods: {
-      getServers () {
-        this.axios.get('http://viper.servnx.com:3050/api/servers/statistics', {
+      getStats() {
+        this.axios.get('http://viper.servnx.com:3050/api/statistics', {
           params: {
             token: this.token,
           },
         }).then(response => {
-          response.data.groups.forEach(server => {
+          const serverCount = response.data.server_count;
+          const channelCount = response.data.channel_count;
+          const userCount = response.data.user_count;
+          const createdAtGroups = response.data.created_at_groups.groups;
+          const lastCreatedServerTimestamp = response.data.created_at_groups.last;
+
+          this.servers.last = moment(lastCreatedServerTimestamp)
+            .utc(true)
+            .fromNow();
+          this.servers.activeCount = serverCount;
+          this.users.activeCount = userCount;
+          this.channels.activeCount = channelCount;
+
+          createdAtGroups.forEach(server => {
             const createdAt = new Date(server.created_at);
             const label = `${createdAt.getMonth() + 1}/${createdAt.getDate()}`;
 
@@ -118,18 +151,13 @@
             const values = this.servers.values;
             this.servers.values = values.slice(Math.max(values.length - 5, 1));
           });
-
-          this.servers.last = moment(response.data.last).utc(true).fromNow();
-        }).catch(err => {
-          if (err.response.status === 401) {
-            window.location.replace('http://viper.servnx.com:3050/api/auth');
-          }
-        });
+        })
+          .catch(err => console.log(err.response));
       },
     },
     mounted () {
       this.token = localStorage.getItem('access_token');
-      this.getServers();
+      this.getStats();
     },
   };
 </script>

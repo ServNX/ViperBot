@@ -24,7 +24,7 @@ const router = new Router({
     {
       path: '/dashboard',
       name: 'dashboard',
-      // secure: true,
+      secure: true,
       component: () => import('./views/Dashboard.vue'),
     },
   ],
@@ -33,13 +33,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   // Look at all routes
   router.options.routes.forEach((route) => {
-    if (to.matched[0].name === 'dashboard') {
-      if (!localStorage.access_token) {
-        return next('/');
-      }
-    }
-
-    // If this is the current route and it's secure
     if (to.matched[0].path === route.path && route.secure) {
       if (!localStorage.access_token) {
         return next('/');
