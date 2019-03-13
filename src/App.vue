@@ -38,6 +38,11 @@
 
 <script>
   // eslint-disable-next-line
+  import * as socketIo from 'socket.io-client';
+
+  const socket = socketIo('http://viper.servnx.com:3050');
+
+  // eslint-disable-next-line
   import { getUrlParam } from './utils/uri';
 
   export default {
@@ -56,6 +61,9 @@
         localStorage.setItem('access_token', token);
         window.location.replace('/dashboard');
       }
+    },
+    mounted() {
+      socket.on('hello', data => console.log(data));
     },
   };
 </script>

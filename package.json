@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "material-design-icons-iconfont": "^4.0.5",
     "moment": "^2.24.0",
+    "socket.io": "^2.2.0",
     "vue": "^2.6.6",
     "vue-axios": "^2.1.4",
     "vue-router": "^3.0.1",
