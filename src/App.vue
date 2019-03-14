@@ -14,7 +14,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon href="http://viper.servnx.com:3050/api/auth" v-if="!logged_in">
+        <v-btn icon :href="auth_url" v-if="!logged_in">
           <v-icon>person</v-icon>
         </v-btn>
 
@@ -40,7 +40,8 @@
   // eslint-disable-next-line
   import * as socketIo from 'socket.io-client';
 
-  const socket = socketIo('http://viper.servnx.com:3050');
+  const apiUrl = process.env.VUE_APP_API_URL;
+  const socket = socketIo(apiUrl);
 
   // eslint-disable-next-line
   import { getUrlParam } from './utils/uri';
@@ -53,6 +54,9 @@
     computed: {
       logged_in () {
         return !!localStorage.getItem('access_token');
+      },
+      auth_url () {
+        return `${apiUrl}/api/auth`;
       },
     },
     beforeCreate () {

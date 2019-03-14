@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import DashboardLayout from './layouts/DashboardLayout';
-  import Statistics from '../components/Statistics';
+  import DashboardLayout from '../layouts/DashboardLayout';
+  import Statistics from './Statistics';
 
   export default {
     name: 'dashboard',

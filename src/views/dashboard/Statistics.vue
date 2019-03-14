@@ -94,7 +94,9 @@
 
 <script>
   import moment from 'moment';
-  import StatCard from './StatCard';
+  import StatCard from '../../components/StatCard';
+
+  const apiUrl = process.env.VUE_APP_API_URL;
 
   export default {
     name: 'statistics',
@@ -120,7 +122,7 @@
     },
     methods: {
       getStats() {
-        this.axios.get('http://viper.servnx.com:3050/api/statistics', {
+        this.axios.get(`${apiUrl}/api/statistics`, {
           params: {
             token: this.token,
           },

@@ -25,7 +25,7 @@ const router = new Router({
       path: '/dashboard',
       name: 'dashboard',
       secure: true,
-      component: () => import('./views/Dashboard.vue'),
+      component: () => import('./views/dashboard/Dashboard.vue'),
     },
   ],
 });
