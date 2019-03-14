@@ -1,13 +1,23 @@
-# viperbot_web
+# viperbot
 
 ## Project setup
 ```
-npm install
+Rename ".env.example" -> ".env" and edit the values
+Rename "src/bot/config.example.js" -> "src/bot/config.js" and edit the values
+
+Run: npm install -G nodemon
+Run: npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and hot-reloads for the web interface
 ```
 npm run serve
+```
+
+### Start bot and http api server
+`requires: `
+```
+cd src/bot && nodemon .
 ```
 
 ### Compiles and minifies for production
@@ -20,7 +30,7 @@ npm run build
 npm run lint
 ```
 
-### Run your unit tests
+### Run unit tests
 ```
 npm run test:unit
 ```
