@@ -64,7 +64,7 @@
 
     <v-layout row>
       <v-flex xs6>
-        <StatCard
+        <SparkCard
           :labels="servers.labels"
           :values="servers.values"
           title="New Servers"
@@ -78,7 +78,7 @@
               last server created {{servers.last}}
             </span>
           </div>
-        </StatCard>
+        </SparkCard>
       </v-flex>
 
       <v-flex xs6>
@@ -94,14 +94,14 @@
 
 <script>
   import moment from 'moment';
-  import StatCard from '../../components/StatCard';
+  import SparkCard from '../../components/SparkCard';
 
   const apiUrl = process.env.VUE_APP_API_URL;
 
   export default {
     name: 'statistics',
     components: {
-      StatCard,
+      SparkCard,
     },
     data () {
       return {
@@ -121,7 +121,7 @@
       };
     },
     methods: {
-      getStats() {
+      getStats () {
         this.axios.get(`${apiUrl}/api/statistics`, {
           params: {
             token: this.token,

@@ -38,7 +38,7 @@
 
 <script>
   export default {
-    name: 'stat-card',
+    name: 'spark-card',
     props: {
       labels: {type: Array, required: true},
       values: {type: Array, required: true},
